@@ -40,7 +40,7 @@ int main (int argc, char *argv[])
   int i, j, k, n, m, nf, keep, xpix, ypix, cellID, frameID, bmax, numvars;
   float X, Y, Volume, Thickness, Radius, Area, Sphericity, Vel1, Vel2;
   float Length, Width, Orientation, Mass, Displacement, Velocity, TrackLength;
-  int tmp, dtmp, dtmp1, dtmp2, dtmp3, dtmp4;
+  int dtmp, dtmp1, dtmp2, dtmp3, dtmp4;
   int ncells, nframes, cellnummax, keepframe;
   double diff;
   int numinput = 49;
@@ -51,7 +51,7 @@ int main (int argc, char *argv[])
   char filelistname[100];
   char ch;
   char classlabel[10];
-  
+
   if (argc != 3) printf("correct usage: ./cell inputgroup_name classlabel\n");
   /* will add _Phase-FullFeatureTable.csv to inputgroup_name and boundaries.csv to boundary_filename */
   strcpy(cellgroupname, argv[1]);
@@ -60,14 +60,15 @@ int main (int argc, char *argv[])
   /* open filelist */
   strcpy(inputname, cellgroupname);
   strcat(inputname, "_Phase-FullFeatureTable.csv\0");
-  
+
   FILE *fp = NULL;
   fp = fopen(inputname, "r");
   printf("opened %s\n", inputname);
- 
+
   /* allocate space for cellinfo */
   C *cell= NULL;
   cell= (C *) malloc (MAXC * sizeof(C));
+
   for (i = 0; i < MAXC; i++)
   {
     cell[i].framenum = (int *) malloc (MAXF * sizeof(int));
@@ -91,18 +92,18 @@ int main (int argc, char *argv[])
     for (j = 0; j < MAXF; j++)
     {
       cell[i].boundary[j].xpix = (int *) malloc (MAXB * sizeof(int));
-      cell[i].boundary[j].ypix = (int *) malloc (MAXB * sizeof(int));    
+      cell[i].boundary[j].ypix = (int *) malloc (MAXB * sizeof(int));
     }
     cell[i].object = (AREA *) malloc (MAXF * sizeof(AREA));
     for (j = 0; j < MAXF; j++)
     {
       cell[i].object[j].xpix = (int *) malloc (MAXA * sizeof(int));
-      cell[i].object[j].ypix = (int *) malloc (MAXA * sizeof(int));    
-      cell[i].object[j].intensity = (int *) malloc (MAXA * sizeof(int));    
-      cell[i].object[j].miniImage = (int *) malloc (MAXA * sizeof(int));    
-      cell[i].object[j].lev0Pix = (double *) malloc (MAXA * sizeof(double));    
+      cell[i].object[j].ypix = (int *) malloc (MAXA * sizeof(int));
+      cell[i].object[j].intensity = (int *) malloc (MAXA * sizeof(int));
+      cell[i].object[j].miniImage = (int *) malloc (MAXA * sizeof(int));
+      cell[i].object[j].lev0Pix = (double *) malloc (MAXA * sizeof(double));
       cell[i].object[j].lev1Pix = (double *) malloc (MAXA * sizeof(double));
-      cell[i].object[j].lev2Pix = (double *) malloc (MAXA * sizeof(double));    
+      cell[i].object[j].lev2Pix = (double *) malloc (MAXA * sizeof(double));
       cell[i].object[j].cooc01 = (double *) malloc (NCOOC*NCOOC * sizeof(double));
       cell[i].object[j].cooc12 = (double *) malloc (NCOOC*NCOOC * sizeof(double));
       cell[i].object[j].cooc02 = (double *) malloc (NCOOC*NCOOC * sizeof(double));
@@ -110,23 +111,23 @@ int main (int argc, char *argv[])
     cell[i].wave = (double *) malloc ((MAXF) * sizeof(double));
     cell[i].wl = (int *) malloc ((LEVELS + 1) * sizeof(int));
   }
-    
+
   NAMES *vname= NULL;
   vname = (NAMES *) malloc (numinput * sizeof(NAMES));
 
   /* read past first two lines */
-  tmp = readLine(fp);
+  readLine(fp);
 
-  tmp = readLine(fp);
+  readLine(fp);
   keep = 1;
   /* n is the cell counter */
   n = 0;
   /* m is the frame counter for each cell */
   m = 0;
   cellnummax = 0;
-  while (fscanf(fp, "%c%d%c,%c%d%c,%c%d%c,%c%d%c,", &ch, &dtmp, &ch, &ch, &dtmp1, &ch, &ch, &dtmp2,&ch, &ch,  &dtmp3, &ch) != EOF)
+  while (fscanf(fp, "%c%d%c,%c%d%c,%c%d%c,%c%d%c,", &ch, &dtmp, &ch, &ch, &dtmp1, &ch, &ch, &dtmp2, &ch, &ch,  &dtmp3, &ch) != EOF)
   {
-    tmp = fscanf(fp, "%c%f%c,%c%f%c,%c%d%c,%c%d%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c\n", &ch, &X, &ch, &ch, &Y, &ch, &ch, &xpix, &ch, &ch, &ypix, &ch, &ch, &Volume, &ch, &ch, &Thickness, &ch, &ch, &Radius, &ch, &ch, &Area, &ch, &ch, &Sphericity, &ch, &ch, &Length, &ch, &ch, &Width, &ch, &ch, &Orientation, &ch, &ch, &Mass, &ch, &ch, &Displacement, &ch, &ch, &Velocity,  &ch, &ch, &Vel1,  &ch, &ch, &Vel2, &ch, &ch, &TrackLength, &ch);
+    fscanf(fp, "%c%f%c,%c%f%c,%c%d%c,%c%d%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c,%c%f%c\n", &ch, &X, &ch, &ch, &Y, &ch, &ch, &xpix, &ch, &ch, &ypix, &ch, &ch, &Volume, &ch, &ch, &Thickness, &ch, &ch, &Radius, &ch, &ch, &Area, &ch, &ch, &Sphericity, &ch, &ch, &Length, &ch, &ch, &Width, &ch, &ch, &Orientation, &ch, &ch, &Mass, &ch, &ch, &Displacement, &ch, &ch, &Velocity,  &ch, &ch, &Vel1,  &ch, &ch, &Vel2, &ch, &ch, &TrackLength, &ch);
     if (dtmp2 != keep)
     {
       keep = dtmp2;
@@ -189,11 +190,12 @@ int main (int argc, char *argv[])
   }
   nf = dtmp+1;
   ncells = n+1;
+  
   fclose(fp);
+  
   numvars = 11;
- 
+
   /* info on which cells are in which frames */
-  int totalcells = 0;
   F *frame = NULL;
   frame = (F *) malloc (nf * sizeof(F));
   for (k = 0; k < nf; k++)
@@ -208,10 +210,9 @@ int main (int argc, char *argv[])
         frame[k].num++;
       }
     }
-    totalcells = frame[k].num;
 
   }
-  
+
   /* get positions in cell array of each cellID */
   int *cellnums = NULL;
   cellnums= (int *) malloc (cellnummax * sizeof(int));
@@ -223,14 +224,14 @@ int main (int argc, char *argv[])
   {
     cellnums[cell[i].cellID] = i;
   }
-    
+
   /* open boundary file */
   strcpy(boundname, cellgroupname);
   strcat(boundname, "_boundaries.csv\0");
-  
+
   fp = fopen(boundname, "r");
   printf("opened %s\n", boundname);
- 
+
   /* read in boundary data */
   fscanf(fp, "%d,", &dtmp);
   bmax = dtmp;
@@ -256,19 +257,19 @@ int main (int argc, char *argv[])
     }
   }
   fclose(fp);
-   
+
   /* image filelist  */
   strcpy(filelistname, cellgroupname);
   strcat(filelistname, "_imagelist.txt\0");
   printf("opened %s\n", filelistname);
-    
+
   minBox (cell, ncells, numvars);
   strcpy(vname[11].var, "Box\0");
   strcpy(vname[12].var, "Rect\0");
-  numvars = numvars + 2; 
+  numvars = numvars + 2;
   VarFromCentre (cell, ncells, numvars);
   strcpy(vname[13].var, "VfC\0");
-  numvars = numvars + 1;       
+  numvars = numvars + 1;
   curvature (cell, ncells, 4, numvars);
   strcpy(vname[14].var, "Cur\0");
   numvars = numvars + 1;
@@ -277,10 +278,10 @@ int main (int argc, char *argv[])
   numvars = numvars + 1;
   fillobject(filelistname, cell, frame, nf, numvars);
   strcpy(vname[16].var, "Area\0");
-  numvars = numvars + 1;    
+  numvars = numvars + 1;
   atob (cell, ncells, numvars);
   strcpy(vname[17].var, "A2B\0");
-  numvars = numvars + 1;    
+  numvars = numvars + 1;
   polyClass(cell, ncells, numvars);
   strcpy(vname[18].var, "poly1\0");
   strcpy(vname[19].var, "poly2\0");
@@ -303,7 +304,7 @@ int main (int argc, char *argv[])
   strcpy(vname[32].var, "FOsd\0");
   strcpy(vname[33].var, "FOskew\0");
   numvars = numvars + 3;
-  cooccurVariables(cell, ncells, numvars); 
+  cooccurVariables(cell, ncells, numvars);
   strcpy(vname[34].var, "Hf1_01\0");
   strcpy(vname[35].var, "Hf2_01\0");
   strcpy(vname[36].var, "Hf3_01\0");
@@ -319,9 +320,9 @@ int main (int argc, char *argv[])
   strcpy(vname[46].var, "Hf3_02\0");
   strcpy(vname[47].var, "Hf4_02\0");
   strcpy(vname[48].var, "Hf5_02\0");
- 
+
   interpolate (cell, ncells, numinput);
- 
+
   /* calculate total ascent and descent */
   for (i = 0; i < ncells; i++)
   {
@@ -343,7 +344,7 @@ int main (int argc, char *argv[])
       }
     }
   }
-  
+
   /* calculate wavelet detail coefficients */
   for (i = 0; i < ncells; i++)
   {
@@ -359,7 +360,7 @@ int main (int argc, char *argv[])
       }
     }
   }
-   
+
   summarystats(cell, ncells, numinput);
 
   /*write out all values (timeseries for each cell) for particular variables */
@@ -439,7 +440,7 @@ void fSort (double *array, int *index, int nRef)
   nInt = nRef;
   if (nInt == 1)
     return;
-  
+
   do
   {
     nInt = nInt / 2;
@@ -479,15 +480,14 @@ Procedure:    code for Daubechies' 2-coefficient (Haar) wavelet from Numerical R
 void daub2(double *a, int n, int isign)
 {
   double *wksp=NULL;
-  int nh, nh1, i,j;
+  int nh, i,j;
   double D0 = 0.70710678;
   double D1 = 0.70710678;
-  
+
   wksp = (double *) malloc (n* sizeof(double));
 
   if (n < 4) return;
   nh = n/2;
-  nh1 = nh+1;
   if (isign >= 0)
   {
     i = 0;
@@ -536,24 +536,24 @@ void waveTran(double *inputArray, int arraynum, double *outputArray, int *detlen
   {
     xVector[x] = inputArray[x];
   }
-  
+
   for (k = 0; k < LEVELS; k++)
   {
     ww = 0;
     if (length % 2 != 0) ww = 1;
-    
+
     /* do transform */
     if (ww == 1) xVector[length] = xVector[length - 1];
     length = length + ww;
-    
+
     daub2(xVector,length, 1);
-    
+
     /* rescale for next level */
     for (x = 0; x < length - ww; x++)
     {
       xVector[x] /= root2;
     }
-    
+
     length = length/2;
     /* output detail coefficients */
     for (x = 0; x < length - ww; x++)
@@ -562,7 +562,7 @@ void waveTran(double *inputArray, int arraynum, double *outputArray, int *detlen
     }
     detlength[k+1] = detlength[k] + length - ww;
   }
- 
+
  free(xVector);
 }
 
@@ -578,7 +578,7 @@ void wavevars(double *inputArray, int start, int end, double *vars, int lev)
 
   double *tempArray = NULL;
   tempArray = (double *) malloc (length * sizeof(double));
-   
+
   n = 0;
   for (k = start; k < end; k++)
   {
@@ -595,7 +595,7 @@ void wavevars(double *inputArray, int start, int end, double *vars, int lev)
     diff = tempArray[k] - tempArray[k-1];
     if (diff > 0) ascent += diff;
     else descent += diff;
-    
+
     if (fabs(tempArray[k]) > max) max = fabs(tempArray[k]);
   }
   vars[3*(lev + 1)] = ascent/(float)length;
@@ -694,7 +694,7 @@ void summarystats(C *cell, int ncells, int nvars)
 {
   int i, j, k, nummissing, notmissing;
   double m1, m2, m3, en, enm1, enm2;
-  
+
   for (i = 0; i < ncells; i++)
   {
     nummissing = 0;
@@ -740,7 +740,7 @@ void summarystats(C *cell, int ncells, int nvars)
         if (m2 == 0.0) cell[i].input[k].stats[2] = 0.0;
         else cell[i].input[k].stats[2] = (m3 * en * sqrt(enm1))/(enm2 * m2 * sqrt(m2));
       }
-      
+
     }
   }
 
@@ -803,7 +803,7 @@ void VarFromCentre(C *cell, int ncells, int jj)
   }
   free(dist);
 }
-        
+
 /*****************************************************************************
  Procedure:  minBox
  Description:    calculates minimal rectangular box that the cell will fit in
@@ -821,18 +821,18 @@ void minBox(C *cell, int ncells, int inputnum)
   {
     for (k = 0; k < cell[i].num; k++)
     {
-      if (cell[i].missingframe[k] != 1) 
+      if (cell[i].missingframe[k] != 1)
       {
         /* find maximum distance between two boundary points */
         maxdist = 0.0;
         for (j = 0; j < cell[i].boundary[k].blength; j++)
-        {      
+        {
           for (l = j+1; l < cell[i].boundary[k].blength; l++)
           {
             x1 = cell[i].boundary[k].xpix[j];
-            y1 = cell[i].boundary[k].ypix[j]; 
+            y1 = cell[i].boundary[k].ypix[j];
             x2 = cell[i].boundary[k].xpix[l];
-            y2 = cell[i].boundary[k].ypix[l]; 
+            y2 = cell[i].boundary[k].ypix[l];
             dist = sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
             if (dist > maxdist)
             {
@@ -870,10 +870,10 @@ void minBox(C *cell, int ncells, int inputnum)
         if (ylength > max) max = ylength;
         cell[i].input[inputnum+1].frame[k] = max/(xlength + ylength);
       }
-      else 
+      else
       {
-        cell[i].input[inputnum].frame[k] = -1.0;     
-        cell[i].input[inputnum+1].frame[k] = -1.0;     
+        cell[i].input[inputnum].frame[k] = -1.0;
+        cell[i].input[inputnum+1].frame[k] = -1.0;
       }
     }
   }
@@ -882,7 +882,7 @@ void minBox(C *cell, int ncells, int inputnum)
 
 /*****************************************************************************
 Procedure:  curvature
-Description:    calculates the curvature of the boundary 
+Description:    calculates the curvature of the boundary
 ******************************************************************************/
 void curvature(C *cell, int ncells, int gap, int inputnum)
 {
@@ -895,14 +895,14 @@ void curvature(C *cell, int ncells, int gap, int inputnum)
   {
     for (k = 0; k < cell[i].num; k++)
     {
-      if (cell[i].missingframe[k] != 1) 
+      if (cell[i].missingframe[k] != 1)
       {
         n = cell[i].boundary[k].blength;
         curv = 0.0;
         for (j = 0; j < n; j++)
-        {      
+        {
           x = cell[i].boundary[k].xpix[j];
-          y = cell[i].boundary[k].ypix[j]; 
+          y = cell[i].boundary[k].ypix[j];
           xmgap = cell[i].boundary[k].xpix[(j-gap+n)%n];
           ymgap = cell[i].boundary[k].ypix[(j-gap+n)%n];
           xpgap = cell[i].boundary[k].xpix[(j+gap+n)%n];
@@ -917,8 +917,8 @@ void curvature(C *cell, int ncells, int gap, int inputnum)
           curv = curv + new;
         }
         cell[i].input[inputnum].frame[k] = curv/(float)n;
-      } 
-      else cell[i].input[inputnum].frame[k] = -1.0;     
+      }
+      else cell[i].input[inputnum].frame[k] = -1.0;
 
     }
   }
@@ -928,25 +928,25 @@ void curvature(C *cell, int ncells, int gap, int inputnum)
 Procedure:  reScaleInt
 Description:  input values are re-scaled to have a minimum equal to 0 and a maximum equal to 255
 ************************************************************************************************************/
-void reScaleInt (int num, int *inputArray) 
+void reScaleInt (int num, int *inputArray)
 {
-  int ind, max, min; 
-  double scale; 
+  int ind, max, min;
+  double scale;
   min = 1000;
   max = -1000;
-  
+
   for (ind = 0; ind < num ; ind++)
   {
-    if (inputArray[ind] < min)  min = inputArray[ind];   
-    if (inputArray[ind] > max)  max = inputArray[ind];   
-  } 
+    if (inputArray[ind] < min)  min = inputArray[ind];
+    if (inputArray[ind] > max)  max = inputArray[ind];
+  }
 
-  if (max != min) 
+  if (max != min)
   {
     scale = 255.0/(double)(max-min);
     for (ind = 0; ind < num; ind++)
     {
-      inputArray[ind] = (int)((inputArray[ind] - min)*scale); 
+      inputArray[ind] = (int)((inputArray[ind] - min)*scale);
     }
   }
 }
@@ -960,20 +960,20 @@ void writeImage (const char *filename, int width, int height, int *pixels)
   int i = 0, imageSize = width * height;
 
   int *temp = NULL;
-  temp = (int *) malloc (imageSize * sizeof(int)); 
+  temp = (int *) malloc (imageSize * sizeof(int));
   for(i = 0; i < imageSize; i++)
   {
     temp[i] = (int)pixels[i];
   }
   reScaleInt (width*height, temp);
- 
+
   unsigned char *copyPixels = NULL;
-  copyPixels = (unsigned char *) malloc (imageSize * sizeof(unsigned char)); 
+  copyPixels = (unsigned char *) malloc (imageSize * sizeof(unsigned char));
   for(i = 0; i < imageSize; i++)
   {
     copyPixels[i] = temp[i];
   }
-  
+
   fp = fopen(filename, "w");
 
   for(i = 0; i < height; i++)
@@ -1002,26 +1002,26 @@ void firstNay (int x, int y, int width, int height, int *ip)
 }
 
 /***********************************************************************************************
-Procedure:	1-level 2D wavelet transform 
-Description:    does 1-level x and y wavelet transform 
+Procedure:	1-level 2D wavelet transform
+Description:    does 1-level x and y wavelet transform
 ************************************************************************************************/
 void waveTran2D(int width, int height, double *inputImage, double *levImage)
 {
   int x, y, ind, yind, jnd;
   int xLength = width;
   int yLength = height;
- 
+
   double *xVector   = NULL;
-  double *yVector   = NULL; 
+  double *yVector   = NULL;
   xVector   = (double *) malloc (width * sizeof(double));
   yVector   = (double *) malloc (height * sizeof(double));
   double  *tempImage = NULL;
-  tempImage = (double *) malloc (width * height * sizeof(double)); 
+  tempImage = (double *) malloc (width * height * sizeof(double));
 
   /* do one level x transform */
   for (y = 0; y < yLength; y++)
-  { 
-    yind = width*y; 
+  {
+    yind = width*y;
     for (x = 0; x < xLength; x++)
     {
       ind = x + yind;
@@ -1036,7 +1036,7 @@ void waveTran2D(int width, int height, double *inputImage, double *levImage)
   }
   /* do one level y transform */
   for (x = 0; x < xLength; x++)
-  { 
+  {
     for (y = 0; y < yLength; y++)
     {
       ind = x + width*y;
@@ -1054,7 +1054,7 @@ void waveTran2D(int width, int height, double *inputImage, double *levImage)
   yLength = yLength/2;
   /* output smoothed image */
   for (x = 0; x < xLength; x++)
-  { 
+  {
     for (y = 0; y < yLength; y++)
     {
       ind = x + width*y;
@@ -1069,27 +1069,27 @@ void waveTran2D(int width, int height, double *inputImage, double *levImage)
 
 /*************************************************************************************
 Procedure:  shrinkmask
-Description: produces a mask at a particular level from the one at the previous level 
+Description: produces a mask at a particular level from the one at the previous level
 new mask is only 0 if all 4 pixels in previous level are 0
 ***************************************************************************************/
 void shrinkmask(int width, int height, int *mask, int *newmask)
 {
   int i, j, inds, x, y, indb, n;
-  
+
   for (i = 0; i < width; i++)
   {
     for (j = 0; j < height; j++)
     {
       inds = i + j*width;
       newmask[inds] = 1;
-      n = 0; 
+      n = 0;
       for (x = 0; x < 2; x++)
       {
         for (y = 0; y < 2; y++)
         {
           indb = 2*i + x + 2*width * (2*j + y);
           if (mask[indb] == 0) n++;
-        }  
+        }
       }
       if (n == 4) newmask[inds] = 0;
     }
@@ -1106,7 +1106,7 @@ void reScale (int num, double *inputArray, int *mask)
   double max, min, scale;
   min = 1000.0;
   max = -1000.0;
-  
+
   for (ind = 0; ind < num ; ind++)
   {
     if ((mask[ind] == 1) && (inputArray[ind] < min))  min = inputArray[ind];
@@ -1140,14 +1140,14 @@ void getCoocMatrix(double *cooc, double *bigimage, int *bigmask, double *smallim
 {
   int i, j, ls, lb, ind, inds, indb, x, y, nc, twos;
   float n;
-  
+
   nc = NCOOC;
   n = (float)nc;
   twos = pow(2,numlevs);
   /* rescale the two images */
   reScale (w*h, smallimage, smallmask);
   reScale (twos*twos*w*h, bigimage, bigmask);
-    
+
   for (j = 0; j < NCOOC*NCOOC; j++)
   {
     cooc[j] = 0;
@@ -1178,33 +1178,31 @@ void getCoocMatrix(double *cooc, double *bigimage, int *bigmask, double *smallim
 
 /*****************************************************************************
  Procedure:  coocur
- Description:   
+ Description:
 *******************************************************************************/
 void cooccur(int *image, int *mask, int width, int height, C *cell, int cellind, int frameind)
 {
   int j, x, y, ind, jnd;
-  int newwidth, newheight, exw, exh;
-   
+  int newwidth, newheight;
+
   /* check the image size is correct for a 2-level transform */
   newwidth = (width/4)*4;
   if (width - newwidth > 0) newwidth += 4;
-  exw = newwidth - width;
   newheight = (height/4)*4;
   if (height - newheight > 0) newheight += 4;
-  exh = newheight - height;
-  
+
   double  *newimage = NULL;
-  newimage = (double *) malloc (newwidth * newheight * sizeof(double)); 
+  newimage = (double *) malloc (newwidth * newheight * sizeof(double));
   int  *newmask = NULL;
-  newmask = (int *) malloc (newwidth * newheight * sizeof(int)); 
+  newmask = (int *) malloc (newwidth * newheight * sizeof(int));
   double  *lev1image = NULL;
-  lev1image = (double *) malloc ((newwidth/2) * (newheight/2) * sizeof(double)); 
+  lev1image = (double *) malloc ((newwidth/2) * (newheight/2) * sizeof(double));
   int  *lev1mask = NULL;
-  lev1mask = (int *) malloc ((newwidth/2) * (newheight/2)  * sizeof(int)); 
+  lev1mask = (int *) malloc ((newwidth/2) * (newheight/2)  * sizeof(int));
   double  *lev2image = NULL;
-  lev2image = (double *) malloc ((newwidth/4) * (newheight/4) * sizeof(double)); 
+  lev2image = (double *) malloc ((newwidth/4) * (newheight/4) * sizeof(double));
   int  *lev2mask = NULL;
-  lev2mask = (int *) malloc ((newwidth/4) * (newheight/4) * sizeof(int)); 
+  lev2mask = (int *) malloc ((newwidth/4) * (newheight/4) * sizeof(int));
 
   /* transfer the image to the double array, extending if necessary */
   for (j = 0; j < newwidth * newheight; j++)
@@ -1220,13 +1218,13 @@ void cooccur(int *image, int *mask, int width, int height, C *cell, int cellind,
       jnd = x + y*newwidth;
       newimage[jnd] = (float)image[ind];
       newmask[jnd] = mask[ind];
-    }  
+    }
   }
   /* store non-mask pixels as real numbers */
   cell[cellind].object[frameind].lev0num = 0;
   for (x = 0; x < newwidth*newheight; x++)
   {
-    if (newmask[x] != 0) 
+    if (newmask[x] != 0)
     {
       cell[cellind].object[frameind].lev0Pix[cell[cellind].object[frameind].lev0num] = newimage[x];
       cell[cellind].object[frameind].lev0num++;
@@ -1238,7 +1236,7 @@ void cooccur(int *image, int *mask, int width, int height, C *cell, int cellind,
   cell[cellind].object[frameind].lev1num = 0;
   for (x = 0; x < (newwidth/2)*(newheight/2); x++)
   {
-    if (lev1mask[x] != 0) 
+    if (lev1mask[x] != 0)
     {
       cell[cellind].object[frameind].lev1Pix[cell[cellind].object[frameind].lev1num] = lev1image[x];
       cell[cellind].object[frameind].lev1num++;
@@ -1249,35 +1247,35 @@ void cooccur(int *image, int *mask, int width, int height, C *cell, int cellind,
   cell[cellind].object[frameind].lev2num = 0;
   for (x = 0; x < (newwidth/4)*(newheight/4); x++)
   {
-    if (lev2mask[x] != 0) 
+    if (lev2mask[x] != 0)
     {
       cell[cellind].object[frameind].lev2Pix[cell[cellind].object[frameind].lev2num] = lev2image[x];
       cell[cellind].object[frameind].lev2num++;
     }
-  }   
-  
+  }
+
   /* calculate co-occurrence matrix between image and first level wavelet approximation */
   double  *cooc01 = NULL;
   cooc01 = (double *) malloc (NCOOC*NCOOC * sizeof(double));
   getCoocMatrix(cooc01, newimage, newmask, lev1image, lev1mask, newwidth/2, newheight/2, 1);
-   
+
   /* calculate co-occurrence matrix between first and second level wavelet approximations */
   double  *cooc12 = NULL;
   cooc12 = (double *) malloc (NCOOC*NCOOC * sizeof(double));
   getCoocMatrix(cooc12, lev1image, lev1mask, lev2image, lev2mask, newwidth/4, newheight/4, 1);
-    
+
   /* calculate co-occurrence matrix between image and second level wavelet approximation */
   double  *cooc02 = NULL;
   cooc02 = (double *) malloc (NCOOC*NCOOC * sizeof(double));
   getCoocMatrix(cooc02, newimage, newmask, lev2image, lev2mask, newwidth/4, newheight/4, 2);
-  
+
   for (x = 0; x < NCOOC*NCOOC; x++)
   {
     cell[cellind].object[frameind].cooc01[x] = cooc01[x];
     cell[cellind].object[frameind].cooc12[x] = cooc12[x];
     cell[cellind].object[frameind].cooc02[x] = cooc02[x];
   }
-         
+
   free(newimage);
   free(newmask);
   free(lev1image);
@@ -1300,7 +1298,7 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
 {
   int k, j, i, l, x, y, npix, ind, jnd, width, height;
   int xlim1, xlim2, ylim1, ylim2, n, m;
-  int offsetX, offsetY, tmp, colour, cellind, frameind;
+  int offsetX, offsetY, colour, cellind, frameind;
   int iw = IMAGEWIDTH;
   int ih = IMAGEHEIGHT;
   char name[1024];
@@ -1309,21 +1307,21 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
   fin = fopen(filelist, "r");
 
   int    *image = NULL;
-  image = (int *) malloc (iw * ih * sizeof(int)); 
+  image = (int *) malloc (iw * ih * sizeof(int));
 
   for (k = 0; k < nframes; k++)
   {
     /*read image name */
-    tmp = fscanf(fin, "%s\n", name); 
+    fscanf(fin, "%s\n", name);
     image = loadImage(name, &iw, &ih, &colour);
     for (i = 0; i < frame[k].num; i++)
     {
-      /* cellind is the index of the cell in the main (overall) cell array */      
+      /* cellind is the index of the cell in the main (overall) cell array */
       cellind = frame[k].cells[i];
       /*frameind gives the frame numbers for a particular cell*/
       frameind = k + 1 - cell[cellind].startframe;
 
-      if (cell[cellind].missingframe[frameind] != 1) 
+      if (cell[cellind].missingframe[frameind] != 1)
       {
         /* get limits for boundary "image" */
         xlim1 = IMAGEWIDTH;
@@ -1331,13 +1329,13 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
         ylim1 = IMAGEHEIGHT;
         ylim2 = 0;
         for (j = 0; j < cell[cellind].boundary[frameind].blength; j++)
-        {      
+        {
           x = cell[cellind].boundary[frameind].xpix[j];
-          y = cell[cellind].boundary[frameind].ypix[j]; 
-          if (x < xlim1) xlim1 = x; 
-          if (x > xlim2) xlim2 = x; 
-          if (y < ylim1) ylim1 = y; 
-          if (y > ylim2) ylim2 = y; 
+          y = cell[cellind].boundary[frameind].ypix[j];
+          if (x < xlim1) xlim1 = x;
+          if (x > xlim2) xlim2 = x;
+          if (y < ylim1) ylim1 = y;
+          if (y > ylim2) ylim2 = y;
         }
         cell[cellind].boundary[frameind].xlim1 = xlim1;
         cell[cellind].boundary[frameind].xlim2 = xlim2;
@@ -1348,26 +1346,26 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
         npix = width*height;
         offsetX = xlim1;
         offsetY = ylim1;
-                 
+
         int *miniImage = NULL;
         miniImage = (int *) malloc (npix * sizeof(int));
         /* set "image" to 1 for boundary and -1 for non-boundary */
         for (j = 0; j < npix; j++)
-        {      
+        {
           miniImage[j] = -1;
-        }  
+        }
         for (j = 0; j < cell[cellind].boundary[frameind].blength; j++)
-        {      
+        {
           x = cell[cellind].boundary[frameind].xpix[j];
-          y = cell[cellind].boundary[frameind].ypix[j]; 
+          y = cell[cellind].boundary[frameind].ypix[j];
           ind = (x-xlim1) + width*(y-ylim1);
           miniImage[ind] = 1;
         }
 
         for (j = 0; j < cell[cellind].boundary[frameind].blength; j++)
-        {      
+        {
           x = cell[cellind].boundary[frameind].xpix[j];
-          y = cell[cellind].boundary[frameind].ypix[j]; 
+          y = cell[cellind].boundary[frameind].ypix[j];
         }
 
         int *xmin = NULL;
@@ -1380,59 +1378,59 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
         ymax = (int *) malloc (width* sizeof(int));
         /* get minimum and maximum x and y values for each x for "filling" */
         for (j = 0; j < height; j++)
-        {      
+        {
           xmin[j] = width;
           xmax[j] = 0;
           for (l = 0; l < width; l++)
-          {      
+          {
             ind = l + width*j;
             if (miniImage[ind] == 1)
             {
-              if (l < xmin[j]) xmin[j] = l; 
-              if (l > xmax[j]) xmax[j] = l;              
+              if (l < xmin[j]) xmin[j] = l;
+              if (l > xmax[j]) xmax[j] = l;
             }
           }
-        }   
+        }
         for (j = 0; j < width; j++)
-        {      
+        {
           ymin[j] = height;
           ymax[j] = 0;
           for (l = 0; l < height; l++)
-          {      
+          {
             ind = j + width*l;
             if (miniImage[ind] == 1)
             {
-              if (l < ymin[j]) ymin[j] = l; 
-              if (l > ymax[j]) ymax[j] = l;              
+              if (l < ymin[j]) ymin[j] = l;
+              if (l > ymax[j]) ymax[j] = l;
             }
           }
-        }   
+        }
         /* fill background from edges of image */
         for (j = 0; j < width; j++)
-        {      
+        {
           for (l = 0; l < ymin[j]; l++)
           {
             ind = j + width*l;
             miniImage[ind] = 0;
-          }  
+          }
           for (l = ymax[j] + 1; l < height; l++)
           {
             ind = j + width*l;
             miniImage[ind] = 0;
-          } 
+          }
         }
         for (j = 0; j < height; j++)
-        {      
+        {
           for (l = 0; l < xmin[j]; l++)
           {
             ind = l + width*j;
             miniImage[ind] = 0;
-          }  
+          }
           for (l = xmax[j] + 1; l < width ; l++)
           {
             ind = l + width*j;
             miniImage[ind] = 0;
-          } 
+          }
         }
         /* check for non-boundary pixels with background pixels as neighbours */
         n = 1;
@@ -1440,22 +1438,22 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
         {
           n = 0;
           for (j = 0; j < width; j++)
-          {      
+          {
             for (l = 0; l < height; l++)
             {
               ind = j + width*l;
               if (miniImage[ind] == 0)
               {
-                firstNay (j, l, width, height, ip);    
+                firstNay (j, l, width, height, ip);
                 for (m = 0; m < 4; m++)
                 {
                   if ((ip[m] != -1) && (miniImage[ip[m]] == -1))
                   {
-                    miniImage[ip[m]] = 0; 
+                    miniImage[ip[m]] = 0;
                     n++;
                   }
                 }
-              }  
+              }
             }
           }
         }
@@ -1466,7 +1464,7 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
         cell[cellind].object[frameind].width = width;
         cell[cellind].object[frameind].height = height;
         for (j = 0; j < width; j++)
-        {      
+        {
           for (l = 0; l < height; l++)
           {
             ind = j + width*l;
@@ -1475,20 +1473,20 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
             if (miniImage[ind] != 0)
             {
               cell[cellind].object[frameind].xpix[n] = j;
-              cell[cellind].object[frameind].ypix[n] = l; 
-              cell[cellind].object[frameind].intensity[n] = image[jnd]; 
+              cell[cellind].object[frameind].ypix[n] = l;
+              cell[cellind].object[frameind].intensity[n] = image[jnd];
               if (n > MAXA) printf("PROBLEM: cell with too many pixels for array %d %d\n", cell[cellind].cellID, n);
-              n++;              
-              miniImage[ind] = image[jnd]; 
+              n++;
+              miniImage[ind] = image[jnd];
             }
             else mask[ind] = 0;
             cell[cellind].object[frameind].miniImage[ind] = miniImage[ind];
           }
-        }  
+        }
         cell[cellind].object[frameind].npix = n;
         cell[cellind].input[inputnum].frame[frameind] = n;
 
-        
+
         cooccur(miniImage, mask, width, height, cell, cellind, frameind);
 
 
@@ -1498,11 +1496,11 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
         free (ymin);
         free (ymax);
         free (mask);
-      } 
-      else cell[cellind].input[inputnum].frame[frameind] = -1.0;     
+      }
+      else cell[cellind].input[inputnum].frame[frameind] = -1.0;
     }
   }
-  
+
   fclose(fin);
   free (image);
 }
@@ -1519,9 +1517,9 @@ void fillobject(char *filelist, C *cell, F *frame, int nframes, int inputnum)
     {
       for (k = 0; k < cell[i].num; k++)
       {
-        if (cell[i].missingframe[k] != 1) 
+        if (cell[i].missingframe[k] != 1)
         {
-          cell[i].input[inputnum].frame[k] = cell[i].input[inputnum-1].frame[k]/(float)(cell[i].boundary[k].blength*cell[i].boundary[k].blength);    
+          cell[i].input[inputnum].frame[k] = cell[i].input[inputnum-1].frame[k]/(float)(cell[i].boundary[k].blength*cell[i].boundary[k].blength);
         }
         else cell[i].input[inputnum].frame[k] = -1.0;
       }
@@ -1538,18 +1536,14 @@ void textureVariables(C *cell, int ncells, int inputnum)
   int width, height, c, i, k, minx, miny, maxx, maxy, a, term1, term2, b, xp, xc, yp, yc, Indicator, floorh, num;
   double r, d, h, q, polyarea;
   float quantile;
-    
-  int input;
-  input = inputnum;
-    
-        
+
   for (i = 0; i < ncells; i++)
   {
     printf("cellID: %d\n", i+1);
     for (k = 0; k < cell[i].num; k++)
     {
-      if (cell[i].missingframe[k] != 1) 
-      {    
+      if (cell[i].missingframe[k] != 1)
+      {
         int input = inputnum;
         minx = 0;
         miny = 0;
@@ -1557,7 +1551,7 @@ void textureVariables(C *cell, int ncells, int inputnum)
         term2 = 0;
         Indicator = 0;
         d = 0;
-          
+
         width = cell[i].object[k].width;
         height = cell[i].object[k].height;
         maxx = width - 1;
@@ -1570,7 +1564,7 @@ void textureVariables(C *cell, int ncells, int inputnum)
         {
           r = (maxy-miny) * 0.25;
         }
-              
+
         int *pointstoevaluatex = NULL;
         pointstoevaluatex = (int *) malloc (cell[i].object[k].npix * sizeof(int));
         int *pointstoevaluatey = NULL;
@@ -1578,7 +1572,7 @@ void textureVariables(C *cell, int ncells, int inputnum)
 
         int *sortintensities = NULL;
         sortintensities = (int *) malloc (cell[i].object[k].npix * sizeof(int));
-        
+
         for(c = 0; c < cell[i].object[k].npix; c++)
         {
           sortintensities[c] = cell[i].object[k].intensity[c];
@@ -1596,16 +1590,16 @@ void textureVariables(C *cell, int ncells, int inputnum)
             }
           }
         }
-         
+
         for(q = 0.1; q < 0.95; q+=0.1)
         {
           Indicator = 0;
           h = ((cell[i].object[k].npix) - 1)*q + 1;
           floorh = floor(h);
           quantile = sortintensities[floorh - 1] + (h - floorh)*(sortintensities[floorh] - sortintensities[floorh-1]);
-                              
+
           num = 0;
-                          
+
           for(c = 0; c < cell[i].object[k].npix; c++)
           {
             if(cell[i].object[k].intensity[c] >= quantile)
@@ -1626,7 +1620,7 @@ void textureVariables(C *cell, int ncells, int inputnum)
           term1 = term1 + (cell[i].boundary[k].xpix[cell[i].boundary[k].blength - 1]*cell[i].boundary[k].ypix[0]);
           term2 = term2 + (cell[i].boundary[k].xpix[0]*cell[i].boundary[k].ypix[cell[i].boundary[k].blength - 1]);
           polyarea = 0.5 * abs(term1 + (cell[i].boundary[k].xpix[0] * cell[i].boundary[k].ypix[0]) - term2 - (cell[i].boundary[k].xpix[0] * cell[i].boundary[k].ypix[0]));
-                              
+
           for(a = 0; a < num; a++)
           {
             for(b = 0; b < num; b++)
@@ -1637,7 +1631,7 @@ void textureVariables(C *cell, int ncells, int inputnum)
                 yp = pointstoevaluatey[b];
                 xc = pointstoevaluatex[a];
                 yc = pointstoevaluatey[a];
-                                        
+
                 d = sqrt(((xp - xc)*(xp - xc))+(yp - yc)*(yp - yc));
                 if(d < r)
                 {
@@ -1651,11 +1645,11 @@ void textureVariables(C *cell, int ncells, int inputnum)
           cell[i].input[input].frame[k] = Kemp - Ktheo;
           input = input + 1;
         }
-                          
+
         free(sortintensities);
         free(pointstoevaluatex);
         free(pointstoevaluatey);
-                          
+
       }
     }
   }
@@ -1670,7 +1664,7 @@ void FOstats(double *array, int num, double *stats)
 {
   int j;
   double m1, m2, m3, en, enm1, enm2;
-  
+
   en = (float)(num);
   enm1 = en - 1.0;
   enm2 = en - 2.0;
@@ -1707,7 +1701,7 @@ Procedure:  firstOrderOriginal
 Description: Extracts first order features from pixel intensity histogram of each cell in each frame
 *****************************************************************************************************/
 void firstOrderOriginal(C *cell, int ncells, int inputnum)
-{    
+{
   int c, i, k;
 
   double *stats = NULL;
@@ -1715,24 +1709,24 @@ void firstOrderOriginal(C *cell, int ncells, int inputnum)
 
   double *array = NULL;
   array = (double *) malloc (MAXA * sizeof(double));
-   
+
   for (i = 0; i < ncells; i++)
   {
     for (k = 0; k < cell[i].num; k++)
     {
-      if (cell[i].missingframe[k] != 1) 
+      if (cell[i].missingframe[k] != 1)
       {
         for(c = 0; c < cell[i].object[k].npix; c++)
         {
           array[c] = (float)cell[i].object[k].intensity[c];
         }
         FOstats(array, cell[i].object[k].npix, stats);
- 
+
         cell[i].input[inputnum].frame[k] = stats[0];
         cell[i].input[inputnum + 1].frame[k] = stats[1];
         cell[i].input[inputnum + 2].frame[k] = stats[2];
       }
-      else 
+      else
       {
         cell[i].input[inputnum].frame[k] = -1.0;
         cell[i].input[inputnum + 1].frame[k] = -1.0;
@@ -1768,7 +1762,7 @@ void haralick(double *cooc, int num, double *hf)
   {
     energy = energy + ((cooc[c]/num)*(cooc[c]/num));
   }
-                
+
   for (b = 0; b < NCOOC; b++)
   {
     for(c = 0; c < NCOOC; c++)
@@ -1787,8 +1781,8 @@ void haralick(double *cooc, int num, double *hf)
       }
     }
   }
-  
-  a = 0;              
+
+  a = 0;
   for(b = 0; b < NCOOC; b++)
   {
     for(c = 0; c < NCOOC; c++)
@@ -1821,17 +1815,17 @@ Description: extract Haralick features from co-occurrence matrices between diffe
 void cooccurVariables(C *cell, int ncells, int inputnum)
 {
   int i, k;
-     
+
   double *hf = NULL;
   hf = (double *) malloc (5 * sizeof(double));
-  
+
   for (i = 0; i < ncells; i++)
   {
     for (k = 0; k < cell[i].num; k++)
     {
-      if (cell[i].missingframe[k] != 1) 
+      if (cell[i].missingframe[k] != 1)
       {
-        haralick(cell[i].object[k].cooc01, cell[i].object[k].lev0num, hf);       
+        haralick(cell[i].object[k].cooc01, cell[i].object[k].lev0num, hf);
         cell[i].input[inputnum].frame[k] = hf[0];
         cell[i].input[inputnum+1].frame[k] = hf[1];
         cell[i].input[inputnum+2].frame[k] = hf[2];
@@ -1840,35 +1834,35 @@ void cooccurVariables(C *cell, int ncells, int inputnum)
       }
     }
   }
-     
+
   for (i = 0; i < ncells; i++)
   {
     for (k = 0; k < cell[i].num; k++)
     {
-      if (cell[i].missingframe[k] != 1) 
+      if (cell[i].missingframe[k] != 1)
       {
-        haralick(cell[i].object[k].cooc12, cell[i].object[k].lev1num, hf);       
+        haralick(cell[i].object[k].cooc12, cell[i].object[k].lev1num, hf);
         cell[i].input[inputnum+5].frame[k] = hf[0];
         cell[i].input[inputnum+6].frame[k] = hf[1];
         cell[i].input[inputnum+7].frame[k] = hf[2];
         cell[i].input[inputnum+8].frame[k] = hf[3];
-        cell[i].input[inputnum+9].frame[k] = hf[4];               
+        cell[i].input[inputnum+9].frame[k] = hf[4];
       }
     }
   }
-         
+
   for (i = 0; i < ncells; i++)
   {
     for (k = 0; k < cell[i].num; k++)
     {
-      if (cell[i].missingframe[k] != 1) 
+      if (cell[i].missingframe[k] != 1)
       {
-        haralick(cell[i].object[k].cooc02, cell[i].object[k].lev0num, hf);       
+        haralick(cell[i].object[k].cooc02, cell[i].object[k].lev0num, hf);
         cell[i].input[inputnum+10].frame[k] = hf[0];
         cell[i].input[inputnum+11].frame[k] = hf[1];
         cell[i].input[inputnum+12].frame[k] = hf[2];
         cell[i].input[inputnum+13].frame[k] = hf[3];
-        cell[i].input[inputnum+14].frame[k] = hf[4];               
+        cell[i].input[inputnum+14].frame[k] = hf[4];
       }
     }
   }
@@ -1883,13 +1877,13 @@ double pointttolinedist(int x0, int y0, int x1, int y1, int x2, int y2)
 {
   double fnum, fden, dist;
   int numer, denom;
- 
+
   numer = (y2 - y1)*x0 - (x2 - x1)*y0 + x2*y1 - y2*x1;
   denom = (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1);
   fnum = fabs((float)numer);
   fden = sqrt((float)denom);
   dist = fnum/fden;
- 
+
   return(dist);
 }
 
@@ -1932,7 +1926,7 @@ void polygon(int *xArray, int *yArray, int num, double thresh, int *xPoints, int
   numpoints = 2;
   pointArray[0] = 0;
   pointArray[1] = indkeep;
-  
+
   alldone = 0;
   while (alldone == 0)
   {
@@ -2004,7 +1998,7 @@ void polygon(int *xArray, int *yArray, int num, double thresh, int *xPoints, int
   }
   xPoints[i] = xPoints[0];
   yPoints[i] = yPoints[0];
-  
+
   (*nPoints) = numpoints;
 
   free (pointArray);
@@ -2022,15 +2016,15 @@ void polyClass(C *cell, int ncells, int inputnum)
   double dist, distMax;
   double angle, angleMin;
   double meana, vara, meand, vard;
-  double Asq, Bsq, Csq, a, b, c;
+  double Asq, Bsq, Csq, a, b;
   double thresh = 2.0;
   int nPoints;
-  
+
   for (i = 0; i < ncells; i++)
   {
     for (k = 0; k < cell[i].num; k++)
     {
-      if (cell[i].missingframe[k] != 1) 
+      if (cell[i].missingframe[k] != 1)
       {
         num = cell[i].boundary[k].blength;
         int *xArray = NULL;
@@ -2038,7 +2032,7 @@ void polyClass(C *cell, int ncells, int inputnum)
         int *yArray = NULL;
         yArray = (int *) malloc (num * sizeof(int));
         for (j = 0; j < num; j++)
-        {      
+        {
           xArray[j] = cell[i].boundary[k].xpix[j];
           yArray[j] = cell[i].boundary[k].ypix[j];
         }
@@ -2047,32 +2041,31 @@ void polyClass(C *cell, int ncells, int inputnum)
         int *yPoints = NULL;
         yPoints = (int *) malloc (num+2 * sizeof(int));
         polygon(xArray, yArray, num, thresh, xPoints, yPoints, &nPoints);
-        
+
         distMax = 0.0;
         angleMin = 2.0*PI;
         meana = 0.0;
-        vara = 0.0;    
+        vara = 0.0;
         meand = 0.0;
-        vard = 0.0;   
-        xPoints[nPoints] = xPoints[0]; 
-        yPoints[nPoints] = yPoints[0]; 
-        xPoints[nPoints+1] = xPoints[1]; 
-        yPoints[nPoints+1] = yPoints[2]; 
+        vard = 0.0;
+        xPoints[nPoints] = xPoints[0];
+        yPoints[nPoints] = yPoints[0];
+        xPoints[nPoints+1] = xPoints[1];
+        yPoints[nPoints+1] = yPoints[2];
         for (j = 1; j < nPoints+1; j++)
         {
           x0 = xPoints[j];
           y0 = yPoints[j];
           x1 = xPoints[j-1];
-          y1 = yPoints[j-1];    
+          y1 = yPoints[j-1];
           x2 = xPoints[j+1];
-          y2 = yPoints[j+1]; 
+          y2 = yPoints[j+1];
           Asq =  (double)((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
           Bsq =  (double)((x0 - x2) * (x0 - x2) + (y0 - y2) * (y0 - y2));
-          Csq =  (double)((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));             
+          Csq =  (double)((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
           a = sqrt(Asq);
           b = sqrt(Bsq);
-          c = sqrt(Csq);
-          dist = a; 
+          dist = a;
           if (dist > distMax) distMax = dist;
           meand = meand + dist;
           vard = vard + dist*dist;
@@ -2081,13 +2074,13 @@ void polyClass(C *cell, int ncells, int inputnum)
             angle = acos((Asq + Bsq - Csq)/(2.0*a*b));
             if (angle < angleMin) angleMin = angle;
             meana = meana + angle;
-            vara = vara + angle*angle;    
+            vara = vara + angle*angle;
           }
         }
         meand /= (float)(nPoints+1);
-        vard /= (float)(nPoints+1); 
+        vard /= (float)(nPoints+1);
         meana /= (float)(nPoints+1);
-        vara /= (float)(nPoints+1); 
+        vara /= (float)(nPoints+1);
         cell[i].input[inputnum].frame[k] = distMax;
         cell[i].input[inputnum + 1].frame[k] = angleMin;
         cell[i].input[inputnum + 2].frame[k] = vara - (meana*meana);
@@ -2102,8 +2095,8 @@ void polyClass(C *cell, int ncells, int inputnum)
         cell[i].input[inputnum + 2].frame[k] = -1;
         cell[i].input[inputnum + 3].frame[k] = -1;
       }
-    }    
-  }  
+    }
+  }
 }
 
 /*****************************************************************************
@@ -2146,7 +2139,7 @@ void writedata(C *cell, int ncells, int numinput, int nstats, char *cellgroupnam
   char inputname[100];
   char varname[100];
   char levname[100];
-    
+
   double minX, maxX, minY, maxY, area;
 
   strcpy(inputname, cellgroupname);
@@ -2176,14 +2169,14 @@ void writedata(C *cell, int ncells, int numinput, int nstats, char *cellgroupnam
 
   FILE *fp = NULL;
   fp = fopen(inputname, "w");
-    
+
   for (i = 0; i < ncells; i++)
   {
     minX = cell[i].input[0].frame[0];
     maxX = 0.0;
     minY = cell[i].input[1].frame[0];
     maxY = 0.0;
-     
+
     for (j = 0; j < cell[i].num; j++)
     {
       if(cell[i].input[0].frame[j] < minX)
@@ -2238,12 +2231,12 @@ void writedata(C *cell, int ncells, int numinput, int nstats, char *cellgroupnam
     }
   }
   fprintf(fp, "trajarea\n");
-  
+
   for (i = 0; i < ncells; i++)
   {
     if (cell[i].num > MINLENGTH)
     {
-      fprintf(fp, "%s %s%d %d ", classlabel, cellgroupname, cell[i].cellID, cell[i].num);   
+      fprintf(fp, "%s %s%d %d ", classlabel, cellgroupname, cell[i].cellID, cell[i].num);
       for (j = 2; j < numinput; j++)
       {
         for (k = 0; k < 3; k++)
