@@ -7,4 +7,4 @@ The CellPhe toolkit comprises three main stages: cell boundary coordinate extrac
 The setup and usage of each toolkit component is described in the CellPhe Toolkit Manual, found within this repository, as well as in README files found within the repository subdirectories.
 
 ## Who to contact
-In case of query about this code, please either raise an issue on this repository or contact Julie Wilson <julie.wilson@york.ac.uk>.
+In case of query about this code, please either raise an issue on this repository or contact Julie Wilson (julie.wilson@york.ac.uk).
