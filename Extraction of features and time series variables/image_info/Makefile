@@ -2,8 +2,8 @@ SHELL=/bin/sh
 
 INST_PATH=$$PWD
 
-LIBS=-L/opt/sw/lib -ljpeg -lungif -ltiff 
-DLDEF=-I/opt/sw/include
+LIBS=-L/usr/local/lib -ljpeg -lungif -ltiff 
+DLDEF=-I/usr/local/include
 
 # These are correct for Linux
 CC=gcc -c $(PYTHON_INC) $(DLDEF) -DUSE_LIBTIFF
