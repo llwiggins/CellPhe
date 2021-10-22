@@ -11,7 +11,7 @@
 * LibTiff - test with version 4.2.0, 4.3.0
 
 ### Hardware Requirements
-* This is a memory intensive program - the example provided in this repository ran with ~10GB of memory on macOS, but up to ~120G on Linux with the tested compilers.
+* This is a memory intensive program - the example provided in this repository ran with ~10GB of memory on macOS with Apple clang, but up to ~120G on Linux with gcc.
 
 ## Installation
 
