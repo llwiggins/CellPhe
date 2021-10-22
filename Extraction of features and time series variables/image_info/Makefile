@@ -2,7 +2,7 @@ SHELL=/bin/sh
 
 INST_PATH=$$PWD
 
-LIBS=-L/usr/local/lib -ljpeg -lungif -ltiff 
+LIBS=-L/usr/local/lib -ltiff 
 DLDEF=-I/usr/local/include
 
 # These are correct for Linux
