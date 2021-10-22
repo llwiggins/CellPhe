@@ -61,7 +61,7 @@ DIST = 	Makefile \
 
 FORMS = 
 DESTDIR  = 
-TARGET   = image
+TARGET   = CellPhe
 LIBTARGET = image_info
 
 first: all
