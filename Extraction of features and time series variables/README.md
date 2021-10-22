@@ -87,16 +87,16 @@ $ cd "CellPhe/Extraction of features and time series variables"
 $ make
 ```
 
-A typical build of this software should take fewer than 60 seconds. All being well, you should have an executable file called `image` in component directory. This can be copied to wherever you would like to use it from, or can be added to your `PATH`.
+A typical build of this software should take fewer than 60 seconds. All being well, you should have an executable file called `CellPhe` in component directory. This can be copied to wherever you would like to use it from, or can be added to your `PATH`.
 
 ## Example Usage
 
 ### Running the Program
 
-The `image` program expects two inputs: experiment name used for the feature table, and a cell type label. To run an example with the sample data provided in this repository, execute the following command from the directory containing the `image` program and the sample data:
+The `CellPhe` program expects two inputs: experiment name used for the feature table, and a cell type label. To run an example with the sample data provided in this repository, execute the following command from the directory containing the `CellPhe` program and the sample data:
 
 ```
-$ ./image 05062019_B3_3 B
+$ ./CellPhe 05062019_B3_3 B
 ```
 
 This example run should take ~10 minutes to complete. Please see the user manual for further detail about running the program.
