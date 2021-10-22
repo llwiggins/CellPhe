@@ -103,6 +103,6 @@ This example run should take ~10 minutes to complete. Please see the user manual
 
 ### Expected Output
 
-The example run should produce a single file, `05062019 B3 3outputdata.txt`, space delimited data with the following format:
+The example run should produce a single file, `05062019_B3_3outputdata.txt`, space delimited data with the following format:
 
-The first column is a list of true class labels, in this case all cells are from group ”B”, the treated set. The second column lists concatenations of data file and cell ID, e.g. 05062019 B3 32 references cell 2 from the 05062019 B3 3 data set. The third column lists the number of frames each cell has been tracked for, and the remaining columns list the complete set of variable scores for each cell. Again, consult the user manual for further detail about program output.
+The first column is a list of true class labels, in this case all cells are from group ”B”, the treated set. The second column lists concatenations of data file and cell ID, e.g. 05062019_B3_32 references cell 2 from the 05062019_B3_3 data set. The third column lists the number of frames each cell has been tracked for, and the remaining columns list the complete set of variable scores for each cell. Again, consult the user manual for further detail about program output.
