@@ -1,1 +1,2 @@
 Files for calculation of variable separation scores and downstream data analysis in R, including segmentation error removal, ensemble classification and clustering
+____________________________________________________________________________________________________________________________________________________________________
