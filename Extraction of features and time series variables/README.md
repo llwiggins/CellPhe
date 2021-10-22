@@ -1,7 +1,5 @@
 # CellPhe - Feature Extraction and Selection 
 
-## Overview
-
 ## System Requirements
 
 ### Operating Systems
@@ -95,8 +93,16 @@ A typical build of this software should take fewer than 60 seconds. All being we
 
 ### Running the Program
 
-ADD EXAMPLE RUN USING PROVIDED SAMPLE DATA
+The `image` program expects two inputs: experiment name used for the feature table, and a cell type label. To run an example with the sample data provided in this repository, execute the following command from the directory containing the `image` program and the sample data:
+
+```
+$ ./image 05062019_B3_3 B
+```
+
+This example run should take ~10 minutes to complete. Please see the user manual for further detail about running the program.
 
 ### Expected Output
 
-DESCRIBE PROGRAM OUTPUT
+The example run should produce a single file, `05062019 B3 3outputdata.txt`, space delimited data with the following format:
+
+The first column is a list of true class labels, in this case all cells are from group ”B”, the treated set. The second column lists concatenations of data file and cell ID, e.g. 05062019 B3 32 references cell 2 from the 05062019 B3 3 data set. The third column lists the number of frames each cell has been tracked for, and the remaining columns list the complete set of variable scores for each cell. Again, consult the user manual for further detail about program output.
